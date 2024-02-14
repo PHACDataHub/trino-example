@@ -1,0 +1,8 @@
+sa-key.json
+sa-gcs-key.json
+etc/bigquery.credentials-key
+.env
+**/keys**
+**/**.credentials-key
+other-stuff/**
+# catalog/*.credentials-key

@@ -1,0 +1,69 @@
+version: '1.0'
+
+services:
+  trino:
+    hostname: trino
+    image: 'trinodb/trino:438'
+    ports:
+      - '8080:8080'
+    # environment:
+    #   - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+    volumes:
+      # - ./etc:/usr/lib/trino/etc:ro
+      # - ./etc/catalog:/etc/trino/catalog 
+      - $PWD/etc/catalog:/etc/trino/catalog 
+      - ./sa-gcs-key.json:/sa-gcs-key.json
+      # - ./etc/keys:/etc/trino/keys
+      # - ./keys:/etc/trino/keys
+    networks:
+      - trino-network
+
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    healthcheck:
+      test: ["CMD", "psql", "-U", "${POSTGRES_USER}", "${POSTGRES_DB}"]
+    ports:
+      - '5432:5432'
+    networks:
+      - trino-network
+
+  hive-metastore:
+    # image: 'naushadh/hive-metastore'  
+    build: ./hive-metastore
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_DB=${POSTGRES_DB}
+      - DATABASE_USER=${POSTGRES_USER}
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - S3_ENDPOINT_URL=http://localstack:${LOCALSTACK_PORT}
+      - S3_BUCKET
+      - S3_PREFIX
+    volumes:
+      # - ./etc:/usr/lib/trino/etc:ro
+      # - ./etc/catalog:/etc/trino/catalog 
+      # - $PWD/etc/catalog:/etc/trino/catalog 
+      - ./sa-gcs-key.json:/sa-gcs-key.json
+      # - ./etc/keys:/etc/trino/keys
+  
+
+    ports:
+      - '9083:9083'
+    networks:
+      - trino-network
+
+networks:
+  trino-network:
+    driver: bridge
+
+
+
+

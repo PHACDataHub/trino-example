@@ -5,7 +5,9 @@ FROM openjdk:16-slim
 
 # see https://hadoop.apache.org/releases.html
 ARG HADOOP_VERSION=3.3.0
-# see https://downloads.apache.org/hive/
+# see https://downloads.apache.org/hive/  - now 3.1.3, with 4.0.0 out
+# NOTE - there is hive-standalone-metastore, and hive storage
+# ARG HIVE_METASTORE_VERSION=3.1.3 // only 3.0.0 for standalone
 ARG HIVE_METASTORE_VERSION=3.0.0
 # see https://jdbc.postgresql.org/download.html#current
 ARG POSTGRES_CONNECTOR_VERSION=42.2.18
@@ -13,10 +15,10 @@ ARG POSTGRES_CONNECTOR_VERSION=42.2.18
 # Set necessary environment variables.
 ENV HADOOP_HOME="/opt/hadoop"
 ENV PATH="/opt/spark/bin:/opt/hadoop/bin:${PATH}"
-ENV DATABASE_DRIVER=org.postgresql.Driver
-ENV DATABASE_TYPE=postgres
-ENV DATABASE_TYPE_JDBC=postgresql
-ENV DATABASE_PORT=5432
+# ENV DATABASE_DRIVER=org.postgresql.Driver
+# ENV DATABASE_TYPE=postgres
+# ENV DATABASE_TYPE_JDBC=postgresql
+# ENV DATABASE_PORT=5432
 
 WORKDIR /app
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -43,16 +45,17 @@ RUN \
   echo "Keep this until this lands: https://issues.apache.org/jira/browse/HIVE-22915" && \
     rm /opt/apache-hive-metastore-$HIVE_METASTORE_VERSION-bin/lib/guava-19.0.jar && \
     cp /opt/hadoop-$HADOOP_VERSION/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/apache-hive-metastore-$HIVE_METASTORE_VERSION-bin/lib/ && \
-  echo "Download and install the database connector" && \
-    curl -L https://jdbc.postgresql.org/download/postgresql-$POSTGRES_CONNECTOR_VERSION.jar --output /opt/postgresql-$POSTGRES_CONNECTOR_VERSION.jar && \
-    ln -s /opt/postgresql-$POSTGRES_CONNECTOR_VERSION.jar /opt/hadoop/share/hadoop/common/lib/ && \
-    ln -s /opt/postgresql-$POSTGRES_CONNECTOR_VERSION.jar /opt/hive-metastore/lib/ && \
+  # echo "Download and install the database connector" && \
+  #   curl -L https://jdbc.postgresql.org/download/postgresql-$POSTGRES_CONNECTOR_VERSION.jar --output /opt/postgresql-$POSTGRES_CONNECTOR_VERSION.jar && \
+  #   ln -s /opt/postgresql-$POSTGRES_CONNECTOR_VERSION.jar /opt/hadoop/share/hadoop/common/lib/ && \
+  #   ln -s /opt/postgresql-$POSTGRES_CONNECTOR_VERSION.jar /opt/hive-metastore/lib/ && \
   echo "Purge build artifacts" && \
     apt-get purge -y --auto-remove $build_deps && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY run.sh run.sh
+# COPY run.sh run.sh
 
-CMD [ "./run.sh" ]
+# CMD [ "./run.sh" ]
+# CMD ["/opt/hive-metastore/bin/start-metastore"]
 HEALTHCHECK CMD [ "sh", "-c", "netstat -ln | grep 9083" ]

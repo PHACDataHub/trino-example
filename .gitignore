@@ -6,3 +6,4 @@ etc/bigquery.credentials-key
 **/**.credentials-key
 other-stuff/**
 # catalog/*.credentials-key
+.env-old

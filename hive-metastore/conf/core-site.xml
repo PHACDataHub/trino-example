@@ -1,0 +1,32 @@
+<configuration>
+    <property>
+      <name>fs.gs.auth.service.account.email</name>
+      <value>${env.GCS_SA_EMAIL}</value>
+    </property>
+    <property>
+      <name>fs.gs.auth.service.account.private.key.id</name>
+      <value>{env.GCS_SA_PRIVATE_KEY_ID}</value>
+    </property>
+    <property>
+      <name>fs.gs.auth.service.account.private.key</name>
+      <value>${env.GCS_SA_PRIVATE_KEY}</value>
+      <!-- <value></value> -->
+    </property>
+    <property>
+      <name>fs.gs.project.id</name>
+      <value>${env.GCS_PROJECT_ID}</value>
+      <!-- <value>phx-01h41bw3b0xsf9rmpzmxbee2s9</value> -->
+    </property>
+    <property>
+      <name>fs.gs.reported.permissions</name>
+      <value>777</value>
+    </property>
+    <property>
+        <name>fs.gs.working.dir</name>
+        <value>/</value>
+    </property>
+    <property>
+      <name>fs.gs.path.encoding</name>
+      <value>uri-path</value>
+    </property>
+</configuration>

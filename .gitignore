@@ -1,9 +1,7 @@
-sa-key.json
-sa-gcs-key.json
-etc/bigquery.credentials-key
+**/**.json
 .env
 **/keys**
 **/**.credentials-key
 other-stuff/**
-# catalog/*.credentials-key
 .env-old
+docker-compose.log

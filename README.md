@@ -1,106 +1,114 @@
 # Trino Example
 
-A simple example used to gather requirements.  This example uses [Trino](https://trino.io/) SQL Query engine to query data stored as parquet files in Cloud Storage buckets, then visualized with [Apache Superset](https://github.com/apache/superset). 
+A simple example used to gather requirements.  This example uses [Trino](https://trino.io/) - a distribueted SQL Query engine to query data stored as parquet files in Cloud Storage buckets, then visualized with [Apache Superset](https://github.com/apache/superset). 
 
 Note - this is a work in progress, and not *yet a working example.
 
-<!-- "Trino is not a database with storage, rather, it simply queries data where it lives. When using Trino, storage and compute are decoupled and can be scaled independently. Trino represents the compute layer, whereas the underlying data sources represent the storage layer." \
---https://trino.io/episodes/20.html
-
-Distributed parallel queries with query planning and optimization. -->
+<!-- Distributed parallel queries with query planning and optimization. -->
 
 
 
 ## TODO 
-- [ ] Set up 2 projects with files in GCS bucket (parquet, excel with associated PK/ FK)
-- [ ] Docker compose trino locally (for now)
+- [X] Set up 2 projects with files in GCS bucket (parquet, excel with associated PK/ FK)
+- [X] Docker compose trino locally (for now)
 - [ ] Add Hive metastore in order to use GCS conector
 - [ ] Set up Apache Superset - configure to use trino 
 - [ ] Flush out authentication, authorization requirements and capabilities
 
 
 ## To run 
-<!-- ```
-docker run --name trino -d -p 8080:8080 trinodb/trino
+
 ```
-when docker ps results in healthy, 
+make up
+```
+When built 
 ```
 docker exec -it trino trino
 ```
-when done, 
-```
-quit
-docker stop trino
-docker rm trino
-```
 
-OR -->
-```
-docker compose up 
-```
+## To debug
 
-Once up and running to determine the container ID for trino: 
+Docker log files are written to docker-compose.log
 
 ```
-docker ps
+docker exec -it trino /bin/sh
 ```
-Pick out ID for trino/trinoDB and run the trino CLI:
+or 
+```
+docker exec -it hive metastore /bin/sh
+```
 
+## To tear down 
 ```
-docker exec -it <ID> trino
+make down 
 ```
 
-To tear down 
-```
-docker compose down -v 
-```
 ## Trino CLI commands
 
 Here are the cli commands
 https://trino.io/docs/current/client/cli.html
 
-## UI
+### Trino UI
 http://localhost:8080/ 
 Can view query performance and who performed the query.
 
 
-## Things to note 
+### Things to note 
  
 * Use case insenstive flags in properties or " " around table names if start with numbers or contain -
-<!-- 
-## Thoughts 
-* show using R or python Trino libraries -->
 
+## Configuration
+
+Trino uses [connectors](https://trino.io/docs/current/connector.html) to access to external data sources. Here we're using the [BigQuery connector](https://trino.io/docs/current/connector/bigquery.html), using a json credentials file for each catalog eg tebq.credentials-key.
+
+Add configuration files for each catalog per the connector docs. When we mount the etc/catalog to /etc/trino/catalog in the container we can bypass overriding all of Trino's configuration
+
+https://fithis2001.medium.com/manipulating-delta-lake-tables-on-minio-with-trino-74b25f7ad479
+https://github.com/fithisux/experiment-with-trino-minio-hive
+(look at entrypoint.sh in this one - fix file paths here and there)
+
+open links 
+https://hive.apache.org/developement/quickstart/
+https://trino.io/docs/current/object-storage/file-system-cache.html
+https://trino.io/docs/current/connector/metastores.html#hive-thrift-metastore
+https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration#AdminManualMetastore3.0Administration-RunningtheMetastoreWithoutHive
+https://spark.apache.org/docs/3.0.0-preview/sql-data-sources-hive-tables.html
+https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration#AdminManualMetastore3.0Administration-RunningtheMetastoreWithoutHive
+https://dataedo.com/docs/connecting-to-hive-metastore#:~:text=You%20can%20find%20all%20required,%2Fconf%2Fhive%2Dsite.
+https://cwiki.apache.org/confluence/display/Hive/GettingStarted
+https://stackoverflow.com/questions/50230515/hive-2-3-3-metaexceptionmessageversion-information-not-found-in-metastore
+https://cwiki.apache.org/confluence/display/Hive/Hive+Schema+Tool#HiveSchemaTool-TheHiveSchemaTool
+https://www.google.com/search?q=mbwa+meaning&rlz=1C1GCEV_en___CA1049&oq=mbwa+meaning&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDMzNDJqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8
+* https://community.cloudera.com/t5/Support-Questions/Hive-with-Google-Cloud-Storage/m-p/211279
 
 ## Resources 
-Connectors - https://trino.io/docs/current/connector.html
 
+[Trino docs](docs: https://trino.io/docs/)
+[Trino docker](https://trino.io/docs/current/installation/containers.html)
+[ Trino Hive connector requirements ](https://trino.io/docs/current/connector/hive.html)
+[Trino Github](https://github.com/trinodb/trino)
 
-https://trino.io/download.html
-https://trino.io/docs/current/installation/containers.html
-https://github.com/trinodb
-https://github.com/trinodb/trino
-https://towardsdatascience.com/getting-started-with-trino-query-engine-dc6a2d027d5
+* https://trino.io/docs/current/connector/hive-gcs-tutorial.html
 
-docs: https://trino.io/docs/
-
+https://trino.io/docs/current/object-storage/file-system-gcs.html
 
 ### Authorization
-https://trino.io/docs/current/security/password-file.html
+* https://trino.io/docs/current/security/password-file.html
 oauth2 
-https://trino.io/docs/current/security/oauth2.html
+* https://trino.io/docs/current/security/oauth2.html
 
 ### Connect to Google Cloud Storage (with Hive Connector)
 
 Good explaination of using hive - need HMS - hive metadata service and database
 * https://trino.io/blog/2020/10/20/intro-to-hive-connector.html
 
-Example repo basing this on 
+## Examples
+This one is the one being refered to in the article previously mentioned.  Unfortuneately this is outdated, and does not work. 
 * https://github.com/njanakiev/trino-minio-docker/tree/master
 
 
 Using this image for hive metastore (as we don't need the engine - using Trino)
-* https://github.com/naushadh/hive-metastore
+* https://github.com/naushadh/hive-metastore (this one only has run.sh in container - no other hive-metastore files)
 
 
 Another example 
@@ -145,7 +153,7 @@ GCS
 * https://cloud.google.com/dataproc-metastore/docs/hive-metastore
 * https://community.cloudera.com/t5/Community-Articles/Accessing-Google-Cloud-Storage-via-HDP/ta-p/248754
 
-CREATE SCHEMA bucket.sales_data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
+CREATE SCHEMA lkbucket.sales_data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
 CREATE SCHEMA hive.gcs_export WITH (location = 'gs://bucket-in-lk-project/health_facilities_bc.csv');
 
 USE hive.default;
@@ -218,3 +226,80 @@ This example is using derby data warehouse to store hive metadata (schemas, etc)
 * [add gs settings to core-site]
 - add [hadoop and connector](https://community.cloudera.com/t5/Support-Questions/Installing-HDFS-Google-Cloud-Connector/td-p/56053)
 
+docker compoe build
+docker compose up > docker-compose.log 2>&1
+
+
+
+## DEBUGGING - not seeing bq from other project - lets see why:
+https://cloud.google.com/bigquery/docs/bq-command-line-tool
+(do we need to initializing your .bigqueryrc configuration file.)
+(install gcloud )
+gcloud auth login 
+gcloud config set project phx-01hp7288p8p
+enable bq api
+
+bq ls --project_id phx-01hp7288p8p --format=pretty
+
+bq query \
+'SELECT COUNT(*) FROM iris.iris'
+
+Okay, that works, now lets us the service account 
+
+gcloud auth activate-service-account bq-owner@phx-01hp7288p8p.iam.gserviceaccount.com --key-file=./trino/etc/catalog/tebq.credentials-key
+
+
+## What's going on with hive
+When using core-site directly:
+- no version error - is resulting from needing tables in the hive database
+
+https://trino.io/docs/current/connector/metastores.html#hive-thrift-metastore
+metastores - looks like we need to add properties into hive-site.xml
+
+There's either hive-site or hive-metastore-site.xml. In our case, we're using just the metastore so that's where we'll set up metastore database properties, location, http more, etc
+
+<property>
+     <!-- https://community.hortonworks.com/content/supportkb/247055/errorjavalangunsupportedoperationexception-storage.html -->
+     <name>metastore.storage.schema.reader.impl</name>
+     <value>org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader</value>
+ </property>
+
+ # JSON (using org.apache.hive.hcatalog.data.JsonSerDe)
+# CSV (using org.apache.hadoop.hive.serde2.OpenCSVSerde)
+
+
+This problem occuring is when using https://github.com/naushadh/hive-metastore the hive-metastore container only contains run.sh - nothing else get's populated (maybe error with script)
+
+When adding the .xmls, get issue with database not having tables 
+
+Let's start with straight image and 
+
+
+There's this resource https://docs.cloudera.com/cdw-runtime/1.5.1/hive-metastore/topics/hive-configuring-hms.html
+
+<!-- ----------------------------- -->
+
+https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration
+
+https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration
+
+metastore without hive: 
+https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration#AdminManualMetastore3.0Administration-RunningtheMetastoreWithoutHive
+
+To enable standalone configureation for hive-metastore, modify these 2 properties to:
+* metastore.task.threads.always:	org.apache.hadoop.hive.metastore.events.EventCleanerTask,org.apache.hadoop.hive.metastore.MaterializationsCacheCleanerTask
+* metastore.expression.proxy:	org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy
+
+external datasources:
+https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration#AdminManualMetastore3.0Administration-Option1:EmbeddingDerby
+
+error: MetaException(message:Version information not found in metastore.)
+https://cwiki.apache.org/confluence/display/Hive/Hive+Schema+Tool
+
+
+#### gcs jar file 
+https://aws.amazon.com/blogs/big-data/copy-large-datasets-from-google-cloud-storage-to-amazon-s3-using-amazon-emr/
+
+https://community.cloudera.com/t5/Support-Questions/Installing-HDFS-Google-Cloud-Connector/m-p/56057#M48349
+
+hadoop connector install https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/INSTALL.md

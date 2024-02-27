@@ -159,7 +159,7 @@ Setting up gcs as warehouse directory
 * https://community.cloudera.com/t5/Community-Articles/Accessing-Google-Cloud-Storage-via-HDP/ta-p/248754
 
 ## Examples
-The one being refered to in the article previously mentioned.  
+This is the one referred to in the [previous article](https://trino.io/blog/2020/10/20/intro-to-hive-connector.html), and the one we're using as a base here.  
 * https://github.com/njanakiev/trino-minio-docker/tree/master
 
 

@@ -21,6 +21,7 @@ RUN curl -L https://downloads.apache.org/hive/hive-standalone-metastore-${METAST
     cp gcs-connector-hadoop3-2.2.20-shaded.jar ${HIVE_HOME}/lib/ && \
     cp postgresql-42.4.0.jar ${HIVE_HOME}/lib/ && \
     rm -rf  mysql-connector-java-8.0.19 && \
+    rm -rf gcs-connector-hadoop3-2.2.20-shaded.jar && \
     rm -rf  postgresql-42.4.0.jar
 
 # RUN chmod +x ./scripts/entrypoint.sh

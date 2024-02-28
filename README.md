@@ -118,8 +118,8 @@ Trino - connecting to GCS
 oauth2 
 * https://trino.io/docs/current/security/oauth2.html
 
-### Hive 
-Good explaination of using hive - need hive metadata service and database
+### Hive Metastore
+Good explaination of using hive - need hive metadata service and database (and Hadoop distributed filesystem)
 (we're using this example as a starting point this one)
 * https://trino.io/blog/2020/10/20/intro-to-hive-connector.html
 

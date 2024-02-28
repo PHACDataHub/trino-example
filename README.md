@@ -19,15 +19,13 @@ Note - this is a work in progress, and not *yet a working example.
 ## To run 
 
 ```
-make up
+docker compose build && docker compose up > docker-compose.log 2>&1
 ```
-(or docker compose build && docker compose up > docker-compose.log 2>&1)
 
-When built, in another window, 
+When built (view docker-compose.log), in another terminal launch Trino; 
 ```
 docker exec -it trino trino
 ```
-
 
 ### Trino CLI commands
 
@@ -38,7 +36,7 @@ https://trino.io/docs/current/client/cli.html
 http://localhost:8080/ 
 Can view query performance and who performed the query.
 
-## To debug
+### To debug
 
 Docker log files are written to docker-compose.log
 
@@ -54,9 +52,8 @@ docker exec -it hive metastore /bin/sh
 * Use case insenstive flags in properties or " " around table names if start with numbers or contain -
 ## To tear down 
 ```
-make down 
+docker compose down -v
 ```
-(or docker compose down -v)
 
 
 ## Configuration

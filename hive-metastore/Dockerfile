@@ -1,4 +1,4 @@
-# From https://github.com/bitsondatadev/hive-metastore/blob/master/Dockerfile
+#  from https://github.com/bitsondatadev/hive-metastore/blob/master/Dockerfile
 
 FROM openjdk:8-jre-slim-buster
 
@@ -24,10 +24,15 @@ RUN curl -L https://downloads.apache.org/hive/hive-standalone-metastore-${METAST
     rm -rf gcs-connector-hadoop3-2.2.20-shaded.jar && \
     rm -rf  postgresql-42.4.0.jar
 
-# RUN chmod +x ./scripts/entrypoint.sh
-COPY ./scripts/entrypoint.sh /entrypoint.sh
 
-# USER hive
+COPY scripts/entrypoint.sh /entrypoint.sh
+
+RUN groupadd -r hive --gid=1000 && \
+    useradd -r -g hive --uid=1000 -d ${HIVE_HOME} hive && \
+    chown hive:hive -R ${HIVE_HOME} && \
+    chown hive:hive /entrypoint.sh && chmod +x /entrypoint.sh
+
+USER hive
 EXPOSE 9083
 
 ENTRYPOINT ["sh", "-c", "/entrypoint.sh"]

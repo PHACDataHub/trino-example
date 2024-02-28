@@ -64,7 +64,9 @@ Trino uses [connectors](https://trino.io/docs/current/connector.html) to access 
 
 Configuration files for each catalog are stored in trino/etc/catalog (per the connector docs). When we mount this folder to /etc/trino/catalog location in the container we can bypass overriding all of Trino's configuration.
 
-### Hive Metastore
+### Hive Metastore(HMS) 
+
+(Provides a central repository of metadata )
 
 For Trino, we're using the Hive metastore service rather than the full Hive distribution. See [this article](https://trino.io/blog/2020/10/20/intro-to-hive-connector.html) for an explaination why we're using just the metastore (and database).  Trino uses the hive connector for google cloud storage - which requires a little set up.
 
@@ -73,10 +75,11 @@ For Trino, we're using the Hive metastore service rather than the full Hive dist
 Here are the docs for hive metastore:
 https://cwiki.apache.org/confluence/display/Hive/AdminManual+Metastore+3.0+Administration#AdminManualMetastore3.0Administration-RunningtheMetastoreWithoutHive
 
-To enable standalone configureation for hive-metastore, modify these 2 properties in metastore-site.xml:
+To enable standalone configuration for hive-metastore, modify these 2 properties in metastore-site.xml:
 * metastore.task.threads.always:	org.apache.hadoop.hive.metastore.events.EventCleanerTask,org.apache.hadoop.hive.metastore.MaterializationsCacheCleanerTask
 * metastore.expression.proxy:	org.apache.hadoop.hive.metastore.DefaultPartitionExpressionProxy
 
+In order for this to work, we need HDFS(hadoop distributed file system), with [GCS connector](https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/INSTALL.md)
 
 ## Setup 
 
@@ -170,7 +173,7 @@ https://github.com/arempter/hive-metastore-docker
 
 ### Example Trino Use
 ```
-CREATE SCHEMA lkbucket.sales_data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
+CREATE SCHEMA lkbucket.example_data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
 ```
 ```
 -- create table

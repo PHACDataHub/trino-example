@@ -27,24 +27,32 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_DATABASE: metastore_db
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+    #   interval: 10s
+    #   retries: 5
+    #   timeout: 5s
+    #   start_period: 10s
     networks:
       - trino-network
 
   hive-metastore:
     hostname: hive-metastore
     container_name: hive-metastore
-    image: 'bitsondatadev/hive-metastore:latest'
+    # image: 'bitsondatadev/hive-metastore:latest'
+    build: './hive-metastore'
     ports:
       - '9083:9083' # Metastore Thrift
     volumes:
       - ./hive-metastore/conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
       - ./hive-metastore/conf/core-site.xml:/opt/hadoop-3.2.0/etc/hadoop/core-site.xml
       # - ./sa-gcs-key.json:/opt/hadoop-3.2.0/sa-gcs-key.json
-      - ./sa-gcs-key.json:/sa-gcs-key.json
-      
+      - ./sa-gcs-key.json:/sa-gcs-key.json  
     environment:
       METASTORE_DB_HOSTNAME: mariadb
     depends_on:
+      # mariadb:
+      #   condition: service_healthy
       - mariadb
     networks:
       - trino-network

@@ -36,8 +36,8 @@ services:
 
   hive-metastore:
     container_name: hive-metastore
-    image: 'bitsondatadev/hive-metastore:latest'
-    # build: './hive-metastore'
+    # image: 'bitsondatadev/hive-metastore:latest'
+    build: './hive-metastore'
     ports:
       - '9083:9083' # Metastore Thrift
     volumes:

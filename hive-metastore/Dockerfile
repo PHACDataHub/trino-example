@@ -8,11 +8,17 @@ FROM bitsondatadev/hive-metastore:latest
 # ENV HADOOP_VERSION=3.2.0
 # ENV METASTORE_VERSION=3.0.0
 
-# RUN apt-get update && apt-get install -y netcat curl
+# # RUN apt-get update && apt-get install -y netcat curl
 
 # ENV HADOOP_HOME=/opt/hadoop-${HADOOP_VERSION}
 # ENV HIVE_HOME=/opt/apache-hive-metastore-${METASTORE_VERSION}-bin
+USER root
 
+RUN curl -L --output gcs-connector-hadoop3-2.2.20-shaded.jar https://github.com/GoogleCloudDataproc/hadoop-connectors/releases/download/v2.2.20/gcs-connector-hadoop3-2.2.20-shaded.jar  && \
+    cp gcs-connector-hadoop3-2.2.20-shaded.jar ${HIVE_HOME}/lib/ && \ 
+    rm -rf gcs-connector-hadoop3-2.2.20-shaded.jar
+
+USER hive
 # RUN curl -L https://downloads.apache.org/hive/hive-standalone-metastore-${METASTORE_VERSION}/hive-standalone-metastore-${METASTORE_VERSION}-bin.tar.gz | tar zxf - && \
 #     curl -L https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar zxf - && \
 #     curl -L https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.19.tar.gz | tar zxf - && \

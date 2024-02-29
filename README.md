@@ -98,6 +98,29 @@ Configure access to google cloud storage for trino:
 
 5. docker compose up
 
+### [Superset](https://github.com/apache/superset) 
+
+Using these resources:
+* [releasese](https://github.com/apache/superset/releases)
+* [quickstart](https://superset.apache.org/docs/quickstart)
+* https://medium.com/towards-data-engineering/quick-setup-configure-superset-with-docker-a5cca3992b28
+
+Note - Superset comes with MYSQL database driver, but for any other database connection, you will need to pip install the database driver in the Superset Dockerfile:
+* database drivers https://superset.apache.org/docs/databases/installing-database-drivers/
+
+Log into Superset UI:
+```
+localhost:8088
+
+username: admin
+password: admin
+```
+
+Connect to Trino (connect to database) (here are the [docs](* https://superset.apache.org/docs/databases/trino/), but use below instead)
+- use the trino connector and for the URI, use:
+```
+trino://trino@trino:8080/{catalog_name}
+```
 
 ## Resources 
 
@@ -164,12 +187,18 @@ This is the one referred to in the [previous article](https://trino.io/blog/2020
 
 
 Hive metastore only
-* https://github.com/naushadh/hive-metastore (when running this, the hive metastore container unfortunatley  only has run.sh container - no other hive-metastore files (maybe error with script))
+* https://github.com/naushadh/hive-metastore (when running this, the hive metastore container unfortuneatley  only has run.sh container - no other hive-metastore files (maybe error with script))
 
 Another example 
 * https://medium.com/@adamrempter/running-spark-3-with-standalone-hive-metastore-3-0-b7dfa733de91
 https://github.com/arempter/hive-metastore-docker
 
+Superset
+* https://medium.com/towards-data-engineering/quick-setup-configure-superset-with-docker-a5cca3992b28
+* https://github.com/dgkatz/trino-hive-superset-docker (3 years old)
+* https://github.com/sairamkrish/trino-superset-demo  with 
+* https://sairamkrish.medium.com/visualize-parquet-files-with-apache-superset-using-trino-or-prestosql-511f18a37e3b
+* https://www.youtube.com/watch?v=0NHUs-TERtk, https://www.youtube.com/watch?v=Dw_al_26F6o
 
 ### Example Trino Use
 ```
@@ -193,43 +222,8 @@ CREATE TABLE orders (
 );
 ```
 
-## Apache Superset Links (not here yet)
-* https://superset.apache.org/docs/installation/
-* installing-superset-using-docker-compose/
-* https://github.com/apache/superset
-* https://superset.apache.org/docs/databases/trino/
-* https://www.restack.io/docs/superset-knowledge-apache-superset-trino-integration
-* https://www.restack.io/docs/superset-knowledge-superset-trino-docker-guide
-* https://github.com/sairamkrish/trino-superset-demo
-* https://superset.apache.org/docs/databases/trino/
-
-examples (3 years old)
-* https://github.com/dgkatz/trino-hive-superset-docker
-
-* https://github.com/sairamkrish/trino-superset-demo  with 
-* https://sairamkrish.medium.com/visualize-parquet-files-with-apache-superset-using-trino-or-prestosql-511f18a37e3b
-* https://www.youtube.com/watch?v=0NHUs-TERtk, https://www.youtube.com/watch?v=Dw_al_26F6o
 
 
-* [releasese](https://github.com/apache/superset/releases)
-* [quickstart](https://superset.apache.org/docs/quickstart)
-* https://medium.com/towards-data-engineering/quick-setup-configure-superset-with-docker-a5cca3992b28
-* database drivers https://superset.apache.org/docs/databases/installing-database-drivers/
-
-Connection string to add db - https://superset.apache.org/docs/databases/trino/:
-```
-trino://{username}:{password}@{hostname}:{port}/{catalog}
-```
-When using docker in Superset UI (localhost:8088)
-```
-trino://trino@trino:8080/{catalog_name}
-```
-<!-- error encountered https://github.com/apache/superset/discussions/25231
-
-connect bigquery (not the plan here) by 
-```
-bigquery://{project_id}
-``` -->
 
 
 <!-- 
@@ -249,4 +243,4 @@ https://stackoverflow.com/questions/50230515/hive-2-3-3-metaexceptionmessagevers
 https://cwiki.apache.org/confluence/display/Hive/Hive+Schema+Tool#HiveSchemaTool-TheHiveSchemaTool
 https://www.google.com/search?q=mbwa+meaning&rlz=1C1GCEV_en___CA1049&oq=mbwa+meaning&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDMzNDJqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8
 * https://community.cloudera.com/t5/Support-Questions/Hive-with-Google-Cloud-Storage/m-p/211279 -->
-
+ -->

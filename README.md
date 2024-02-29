@@ -211,8 +211,10 @@ examples (3 years old)
 * https://www.youtube.com/watch?v=0NHUs-TERtk, https://www.youtube.com/watch?v=Dw_al_26F6o
 
 
-
-
+* [releasese](https://github.com/apache/superset/releases)
+* [quickstart](https://superset.apache.org/docs/quickstart)
+* https://medium.com/towards-data-engineering/quick-setup-configure-superset-with-docker-a5cca3992b28
+* database drivers https://superset.apache.org/docs/databases/installing-database-drivers/
 
 
 <!-- 

@@ -233,3 +233,30 @@ https://cwiki.apache.org/confluence/display/Hive/Hive+Schema+Tool#HiveSchemaTool
 https://www.google.com/search?q=mbwa+meaning&rlz=1C1GCEV_en___CA1049&oq=mbwa+meaning&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDMzNDJqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8
 * https://community.cloudera.com/t5/Support-Questions/Hive-with-Google-Cloud-Storage/m-p/211279 -->
 
+
+
+
+
+https://github.com/prestodb/RPresto
+https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/INSTALL.md
+hadoop fs -ls gs://<some-bucket>
+
+trino> CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
+Query 20240229_202406_00003_phgqy failed: java.lang.RuntimeException: java.lang.ClassNotFoundException: Class com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem not found
+
+https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/INSTALL.md (core-site.xml)
+CONFIGURATION https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/CONFIGURATION.md !!!
+
+trino> CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
+Query 20240229_204423_00000_sm64e failed: Got exception: org.apache.hadoop.fs.UnsupportedFileSystemException No FileSystem for scheme "gs"
+
+Placing the connector jar in the HADOOP_COMMON_LIB_JARS_DIR directory should be sufficient to have Hadoop load the jar. Alternatively, to be certain that the jar is loaded, you can add HADOOP_CLASSPATH=$HADOOP_CLASSPATH:</path/to/gcs-connector.jar> to hadoop-env.sh in the Hadoop configuration directory.
+
+hadoop fs -ls gs://bucket-in-lk-project/health_facilities_bc.csv
+
+https://community.cloudera.com/t5/Community-Articles/Accessing-Google-Cloud-Storage-via-HDP/ta-p/248754
+
+
+Here is the download for the cloud storage connector for hadoop https://cloud.google.com/dataproc/docs/concepts/connectors/cloud-storage
+diff versions:
+https://github.com/GoogleCloudDataproc/hadoop-connectors/releases

@@ -1,9 +1,9 @@
 <configuration>
-  <property>
-    <name>fs.gs.impl</name>
+  <!-- <property> -->
+    <!-- <name>fs.gs.impl</name>
     <value>com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem</value>
     <description>The FileSystem for gs: (GCS) uris.</description>
-  </property>
+  </property> -->
   <property>
     <name>fs.AbstractFileSystem.gs.impl</name>
     <value>com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS</value>
@@ -15,9 +15,25 @@
     <description>
     Required. Google Cloud Project ID with access to configured GCS buckets.
     </description>
-  </property>    
+  </property>  
 
   <property>
+    <name>google.cloud.auth.type</name>
+    <value>SERVICE_ACCOUNT_JSON_KEYFILE</value>
+    <description>
+      Authentication type to use for GCS access.
+    </description>
+  </property>  
+  <property>
+    <name>google.cloud.auth.service.account.json.keyfile</name>
+    <value>/opt/sa-gcs-key.json</value>
+    <description>
+      The JSON keyfile of the service account used for GCS
+      access when google.cloud.auth.type is SERVICE_ACCOUNT_JSON_KEYFILE.
+    </description>
+  </property>
+
+  <!-- <property>
     <name>fs.gs.auth.service.account.email</name>
     <value>${GCS_SA_EMAIL}</value>
   </property>
@@ -28,11 +44,12 @@
   <property>
     <name>fs.gs.auth.service.account.private.key</name>
     <value>${GCS_SA_PRIVATE_KEY}</value>
-  </property>
+  </property> -->
+  
   <property>
     <name>fs.gs.project.id</name>
     <value>${GCS_PROJECT_ID}</value>
-  </property>
+  </property> 
   
   <property>
     <name>fs.gs.reported.permissions</name>

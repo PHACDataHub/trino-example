@@ -36,3 +36,4 @@ USER hive
 EXPOSE 9083
 
 ENTRYPOINT ["sh", "-c", "/entrypoint.sh"]
+# ENTRYPOINT ["sh", "-c", "/entrypoint.sh" && tail -f /dev/null]

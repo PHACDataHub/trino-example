@@ -216,6 +216,21 @@ examples (3 years old)
 * https://medium.com/towards-data-engineering/quick-setup-configure-superset-with-docker-a5cca3992b28
 * database drivers https://superset.apache.org/docs/databases/installing-database-drivers/
 
+Connection string to add db - https://superset.apache.org/docs/databases/trino/:
+```
+trino://{username}:{password}@{hostname}:{port}/{catalog}
+```
+When using docker in Superset UI (localhost:8088)
+```
+trino://trino@trino:8080/{catalog_name}
+```
+<!-- error encountered https://github.com/apache/superset/discussions/25231
+
+connect bigquery (not the plan here) by 
+```
+bigquery://{project_id}
+``` -->
+
 
 <!-- 
 https://fithis2001.medium.com/manipulating-delta-lake-tables-on-minio-with-trino-74b25f7ad479

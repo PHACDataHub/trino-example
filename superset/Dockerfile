@@ -3,7 +3,12 @@ FROM apache/superset:latest
 
 USER root
 
-RUN pip install mysqlclient
+# Install database drivers https://superset.apache.org/docs/databases/installing-database-drivers/
+RUN \
+    pip install mysqlclient && \
+    pip install trino && \
+    pip install sqlalchemy-trino && \
+    pip install sqlalchemy-bigquery
 
 ENV ADMIN_USERNAME $ADMIN_USERNAME
 ENV ADMIN_EMAIL $ADMIN_EMAIL

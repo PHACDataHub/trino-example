@@ -243,4 +243,6 @@ https://stackoverflow.com/questions/50230515/hive-2-3-3-metaexceptionmessagevers
 https://cwiki.apache.org/confluence/display/Hive/Hive+Schema+Tool#HiveSchemaTool-TheHiveSchemaTool
 https://www.google.com/search?q=mbwa+meaning&rlz=1C1GCEV_en___CA1049&oq=mbwa+meaning&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDMzNDJqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8
 * https://community.cloudera.com/t5/Support-Questions/Hive-with-Google-Cloud-Storage/m-p/211279 -->
- -->
+
+
+<!-- CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project'); -->

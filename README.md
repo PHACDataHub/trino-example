@@ -248,8 +248,9 @@ https://www.google.com/search?q=mbwa+meaning&rlz=1C1GCEV_en___CA1049&oq=mbwa+mea
 <!-- CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project'); -->
 
 
+<!-- ---------------------------------------------------------------------------- -->
 
-https://github.com/prestodb/RPresto
+<!-- https://github.com/prestodb/RPresto
 https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/INSTALL.md
 hadoop fs -ls gs://<some-bucket>
 
@@ -272,27 +273,7 @@ https://community.cloudera.com/t5/Community-Articles/Accessing-Google-Cloud-Stor
 Here is the download for the cloud storage connector for hadoop https://cloud.google.com/dataproc/docs/concepts/connectors/cloud-storage
 diff versions:
 https://github.com/GoogleCloudDataproc/hadoop-connectors/releases
-
-trino> CREATE SCHEMA lkbucket.healthfacilities WITH (location = 'gs://bucket-in-lk-project/health_facilities_bc.csv');
-
-https://medium.com/@cuongdo.uconn/how-to-hive-on-google-cloud-platform-dataproc-and-storage-d141536644cd
-— Create Sales table
-DROP TABLE IF EXISTS sales_fact;
-CREATE TABLE sales_fact
-(product_id INT,
-time_id INT,
-customer_id INT,
-promotion_id INT,
-store_id INT,
-store_sales DOUBLE,
-store_cost DOUBLE,
-unit_sales INT)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘,’
-STORED AS TEXTFILE
-TBLPROPERTIES(“skip.header.line.count”=”1");
-LOAD DATA INPATH ‘/user/my_gmail_account_name/sales_fact_1998.csv’
-OVERWRITE INTO TABLE sales_fact;
-
+ -->
 
 https://trino.io/docs/current/connector/hive.html
 CREATE TABLE example.avro.avro_data (
@@ -332,13 +313,13 @@ WITH (
 );      
 ```
 ```
-SELECT * FROM lkbucket.iris.iris_data
+SELECT * FROM lkbucket.iris.iris_data;
 ```
 
 
 Other project 
 ```
-CREATE SCHEMA IF NOT EXISTS tebucket.iris WITH (location = 'gs://bucket-in-the-other-project/'); 
+CREATE SCHEMA IF NOT EXISTS tebucket.iris WITH (location = 'gs://bucket-in-the-other-project/iris'); 
 ```
 
 ```
@@ -357,3 +338,5 @@ WITH (
 ```
 SELECT * FROM tebucket.iris.iris_data
 ```
+
+Issue encountered: https://stackoverflow.com/questions/53443495/access-buckets-across-projects-in-gcp-using-hive

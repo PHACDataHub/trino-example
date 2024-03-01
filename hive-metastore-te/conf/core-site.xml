@@ -26,7 +26,7 @@
   </property>  
   <property>
     <name>google.cloud.auth.service.account.json.keyfile</name>
-    <value>/opt/sa-gcs-key-te.json</value>
+    <value>/opt/te-sa-gcs-key.json</value>
     <description>
       The JSON keyfile of the service account used for GCS
       access when google.cloud.auth.type is SERVICE_ACCOUNT_JSON_KEYFILE.

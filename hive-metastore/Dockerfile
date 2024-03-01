@@ -2,6 +2,7 @@
 FROM bitsondatadev/hive-metastore:latest
 
 USER root
+USER root
 WORKDIR /opt
 
 

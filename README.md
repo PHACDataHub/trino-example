@@ -216,6 +216,7 @@ CREATE TABLE orders (
      clerk varchar(15),
      shippriority integer,
      comment varchar(79)
+     
 ) WITH (
      external_location = 'gs://bucket-in-lk-project/',
      format = 'ORC' -- or 'PARQUET'
@@ -291,9 +292,6 @@ WITH (format='CSV',
 
 
 https://sairamkrish.medium.com/visualize-parquet-files-with-apache-superset-using-trino-or-prestosql-511f18a37e3b
-CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
-
-DROP TABLE IF EXISTS lkbucket.iris.iris_data;
 
 ```
 CREATE SCHEMA IF NOT EXISTS lkbucket.iris WITH (location = 'gs://bucket-in-lk-project/iris'); 
@@ -336,7 +334,7 @@ WITH (
 );      
 ```
 ```
-SELECT * FROM tebucket.iris.iris_data
+SELECT count(*) FROM tebucket.iris.iris_data;
 ```
 
 Issue encountered: https://stackoverflow.com/questions/53443495/access-buckets-across-projects-in-gcp-using-hive

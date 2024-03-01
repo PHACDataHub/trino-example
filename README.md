@@ -246,3 +246,97 @@ https://www.google.com/search?q=mbwa+meaning&rlz=1C1GCEV_en___CA1049&oq=mbwa+mea
 
 
 <!-- CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project'); -->
+
+
+<!-- ---------------------------------------------------------------------------- -->
+
+<!-- https://github.com/prestodb/RPresto
+https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/INSTALL.md
+hadoop fs -ls gs://<some-bucket>
+
+trino> CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
+Query 20240229_202406_00003_phgqy failed: java.lang.RuntimeException: java.lang.ClassNotFoundException: Class com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem not found
+
+https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/INSTALL.md (core-site.xml)
+CONFIGURATION https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/CONFIGURATION.md !!!
+
+trino> CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
+Query 20240229_204423_00000_sm64e failed: Got exception: org.apache.hadoop.fs.UnsupportedFileSystemException No FileSystem for scheme "gs"
+
+Placing the connector jar in the HADOOP_COMMON_LIB_JARS_DIR directory should be sufficient to have Hadoop load the jar. Alternatively, to be certain that the jar is loaded, you can add HADOOP_CLASSPATH=$HADOOP_CLASSPATH:</path/to/gcs-connector.jar> to hadoop-env.sh in the Hadoop configuration directory.
+
+hadoop fs -ls gs://bucket-in-lk-project/health_facilities_bc.csv
+
+https://community.cloudera.com/t5/Community-Articles/Accessing-Google-Cloud-Storage-via-HDP/ta-p/248754
+
+
+Here is the download for the cloud storage connector for hadoop https://cloud.google.com/dataproc/docs/concepts/connectors/cloud-storage
+diff versions:
+https://github.com/GoogleCloudDataproc/hadoop-connectors/releases
+ -->
+
+https://trino.io/docs/current/connector/hive.html
+CREATE TABLE example.avro.avro_data (
+   id BIGINT
+ )
+WITH (
+   format = 'AVRO',
+   avro_schema_url = '/usr/local/avro_data.avsc'
+)
+
+CREATE TABLE tablename
+WITH (format='CSV',
+      csv_escape = '"')
+
+
+
+https://sairamkrish.medium.com/visualize-parquet-files-with-apache-superset-using-trino-or-prestosql-511f18a37e3b
+CREATE SCHEMA lkbucket.data_in_gcs WITH (location = 'gs://bucket-in-lk-project/');
+
+DROP TABLE IF EXISTS lkbucket.iris.iris_data;
+
+```
+CREATE SCHEMA IF NOT EXISTS lkbucket.iris WITH (location = 'gs://bucket-in-lk-project/iris'); 
+```
+
+```
+CREATE TABLE IF NOT EXISTS lkbucket.iris.iris_data (
+  sepal_length DOUBLE,
+  sepal_width  DOUBLE,
+  petal_length DOUBLE,
+  petal_width  DOUBLE,
+  class        VARCHAR
+)
+WITH (
+  external_location = 'gs://bucket-in-lk-project/iris/',
+  format = 'PARQUET'
+);      
+```
+```
+SELECT * FROM lkbucket.iris.iris_data;
+```
+
+
+Other project 
+```
+CREATE SCHEMA IF NOT EXISTS tebucket.iris WITH (location = 'gs://bucket-in-the-other-project/iris'); 
+```
+
+```
+CREATE TABLE IF NOT EXISTS tebucket.iris.iris_data (
+  sepal_length DOUBLE,
+  sepal_width  DOUBLE,
+  petal_length DOUBLE,
+  petal_width  DOUBLE,
+  class        VARCHAR
+)
+WITH (
+  external_location = 'gs://bucket-in-the-other-project/iris/',
+  format = 'PARQUET'
+);      
+```
+```
+SELECT * FROM tebucket.iris.iris_data
+```
+
+Issue encountered: https://stackoverflow.com/questions/53443495/access-buckets-across-projects-in-gcp-using-hive

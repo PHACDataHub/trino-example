@@ -29,7 +29,7 @@
         <value>admin</value>
     </property>
 
-    <property>
+    <!-- <property>
         <name>fs.s3a.impl</name>
         <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
     </property>
@@ -48,5 +48,5 @@
     <property>
         <name>fs.s3a.path.style.access</name>
         <value>true</value>
-    </property>
+    </property> -->
 </configuration>

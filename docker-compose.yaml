@@ -1,4 +1,4 @@
-version: '1.0'
+# version: '1.0'
 
 # Based on https://github.com/njanakiev/trino-minio-docker &
 #   https://github.com/bitsondatadev/hive-metastore &
@@ -7,15 +7,17 @@ version: '1.0'
 services:
   trino:
     container_name: trino
-    image: 'trinodb/trino:439'
+    image: 'trinodb/trino:444'
     ports:
       - '8080:8080'
     volumes:
       - $PWD/trino/etc/catalog:/etc/trino/catalog 
+      - ./hive-metastore/conf/core-site-te.xml:/opt/hadoop-3.2.0/etc/hadoop/conf/core-site-te.xml
+      - ./hive-metastore/conf/core-site-lk.xml:/opt/hadoop-3.2.0/etc/hadoop/conf/core-site_lk.xml
       - ./lk-sa-gcs-key.json:/lk-sa-gcs-key.json
       - ./te-sa-gcs-key.json:/te-sa-gcs-key.json
-    networks:
-      - trino-network
+    # networks:
+    #   - trino-network
 
   mariadb:
     container_name: mariadb
@@ -27,27 +29,42 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_DATABASE: metastore_db
-    networks:
-      - trino-network
+    # networks:
+    #   - trino-network
 
-  lk-hive-metastore:
+  # mysql:
+  #   image: mysql:latest
+  #   hostname: mysql
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: admin
+  #     MYSQL_USER: admin
+  #     MYSQL_PASSWORD: admin
+  #     MYSQL_DATABASE: tiny
+  #   ports:
+  #     - '3306:3306'
+  #   networks:
+  #     - trino-network
+
+  hive-metastore:
   # metastore for my GCP project
     container_name: hive-metastore
     # image: 'bitsondatadev/hive-metastore:latest'
-    build: './lk-hive-metastore'
+    build: './hive-metastore'
     ports:
       - '9083:9083' # Metastore Thrift
     volumes:
-      - ./lk-hive-metastore/conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
-      - ./lk-hive-metastore/conf/core-site.xml:/opt/hadoop-3.2.0/etc/hadoop/core-site.xml
+      - ./hive-metastore/conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
+      - ./hive-metastore/conf/core-site-te.xml:/opt/hadoop-3.2.0/etc/hadoop/core-site-te.xml
+      - ./hive-metastore/conf/core-site-lk.xml:/opt/hadoop-3.2.0/etc/hadoop/core-site-lk.xml    
       # - ./sa-gcs-key.json:/opt/hadoop-3.2.0/sa-gcs-key.json
       - ./lk-sa-gcs-key.json:/opt/lk-sa-gcs-key.json
+      - ./te-sa-gcs-key.json:/opt/te-sa-gcs-key.json
     environment:
       METASTORE_DB_HOSTNAME: mariadb
     depends_on:
       - mariadb
-    networks:
-      - trino-network
+    # networks:
+    #   - trino-network
 
   superset:
     container_name: superset
@@ -60,8 +77,9 @@ services:
       - ADMIN_USERNAME=admin
       - ADMIN_EMAIL=admin@superset.com
       - ADMIN_PASSWORD=admin
-    networks:
-      - trino-network
+    # networks:
+    #   - trino-network
+      # - host
 
   # te-hive-metastore:
   # # metastore for trino exemplar project
@@ -84,6 +102,25 @@ services:
   #   networks:
   #     - trino-network
 
-networks:
-  trino-network:
-    driver: bridge
+    # lk-hive-metastore:
+  # # metastore for my GCP project
+  #   container_name: hive-metastore
+  #   # image: 'bitsondatadev/hive-metastore:latest'
+  #   build: './lk-hive-metastore'
+  #   ports:
+  #     - '9083:9083' # Metastore Thrift
+  #   volumes:
+  #     - ./lk-hive-metastore/conf/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
+  #     - ./lk-hive-metastore/conf/core-site.xml:/opt/hadoop-3.2.0/etc/hadoop/core-site.xml
+  #     # - ./sa-gcs-key.json:/opt/hadoop-3.2.0/sa-gcs-key.json
+  #     - ./lk-sa-gcs-key.json:/opt/lk-sa-gcs-key.json
+  #   environment:
+  #     METASTORE_DB_HOSTNAME: mariadb
+  #   depends_on:
+  #     - mariadb
+  #   networks:
+  #     - trino-network
+
+# networks:
+#   trino-network:
+#     driver: bridge

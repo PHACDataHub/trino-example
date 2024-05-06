@@ -11,7 +11,7 @@
   </property>
   <property>
     <name>fs.gs.project.id</name>
-    <value>phx-01h41bw3b0xsf9rmpzmxbee2s9</value>
+    <value>phx-01hwmw2c1r4</value>
     <description>
     Required. Google Cloud Project ID with access to configured GCS buckets.
     </description>

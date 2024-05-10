@@ -2,6 +2,4 @@
 .env
 **/keys**
 **/**.credentials-key
-other-stuff/**
-.env-old
 docker-compose.log

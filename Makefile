@@ -4,5 +4,5 @@ up:
 down: 
 	docker compose down -v
 
-make trino:
+trino:
 	docker exec -it trino trino
